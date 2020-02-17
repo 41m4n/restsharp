@@ -1,4 +1,5 @@
-﻿using RestSharp;
+﻿using Newtonsoft.Json.Linq;
+using RestSharp;
 using System;
 
 namespace restsharp_api
@@ -21,11 +22,30 @@ namespace restsharp_api
         {
             var client = new RestClient("http://localhost/test_api");
 
-            Person person = new Person("hydro", 26);
+            //            Person person = new Person("hydro", 26);
+
+            JObject req = new JObject();
+
+            JArray reqArray = new JArray();
+
+            JObject prod = new JObject(
+                new JProperty("Test3",3)
+                );
+
+            prod.Add("test1", 1);
+            //prod.Add("test2", 2);
+
+            reqArray.Add(prod);
+            req.Add("SmartSwitch", reqArray);
+
+            //prod.Add("test2", 2);
+            //reqArray.Add(prod);
+            //req.Add("SmartCurtain", reqArray);
 
             var request = new RestRequest("index.php",Method.POST);
-            request.AddParameter("id", 5);
+            request.AddParameter("id", req);
             //request.AddJsonBody(person);
+            request.AddParameter("application/json", req, ParameterType.RequestBody);
 
             try
             {
